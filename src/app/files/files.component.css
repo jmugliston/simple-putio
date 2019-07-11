@@ -1,0 +1,26 @@
+.container {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.action-btn {
+  width: 25px;
+  height: 20px;
+  font-size: x-small;
+  padding: 0;
+}
+
+.tooltip > button {
+  animation-name: delayedFadeIn;
+  animation-duration: 1s; /* Adjust this duration */
+}
+
+@Keyframes delayedFadeIn {
+  0% {opacity: 0;}
+  75% {opacity: 0;} /* Set this to 99% for no fade-in. */
+  100% {opacity: 1;}
+}

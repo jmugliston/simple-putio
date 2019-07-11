@@ -1,0 +1,8 @@
+{
+  "/v2/*": {
+    "target": "https://api.put.io",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true
+  }
+}

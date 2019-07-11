@@ -1,0 +1,45 @@
+<ul class="nav nav-pills justified border-bottom-0 mt-1 mb-1">
+  <a class="navbar-brand ml-3 mr-3" style="padding-top: 1px;" target="_blank" href="https://app.put.io/files">
+    <img src="/assets/images/logo.png" height="20" class="d-inline-block align-center" alt="">
+  </a>
+  <li class="nav-item text-center" style="min-width: 100px;">
+    <a class="nav-link text-dark" [class.active]="activeTab==='files'" routerLink="/files" (click)="activeTab='files'">Files</a>
+  </li>
+  <li class="nav-item text-center" style="min-width: 100px;">
+    <a class="nav-link text-dark" [class.active]="activeTab==='transfers'" routerLink="/transfers" (click)="activeTab='transfers'">Transfers</a>
+  </li>
+  <li class="d-flex align-items-center ml-auto mr-2">
+    <div class="mb-1" *ngIf="auth && router.url === '/transfers'">
+      <span class="pt-1 pr-2">
+        <i *ngIf="cleanTranfersInProgress" class="fa fa-spin fa-circle-o-notch"></i>
+      </span>
+      <button class="btn btn-sm btn-light" style="min-width: 105px;" (click)="cleanTransfers()">
+        <span>Clear Finished</span>
+      </button>
+    </div>
+  </li>
+</ul>
+
+<div>
+
+  <div [class.container]="auth" [class.container-no-auth]="!auth">
+
+    <div>
+      <div *ngIf="init">
+        <div *ngIf="auth">
+          <router-outlet></router-outlet>
+        </div>
+        <div *ngIf="!auth" class="d-flex justify-content-center mt-3">
+          <button class="btn btn-sm btn-outline-secondary" (click)="getAuth()">Authorize in Put.io</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <hr class="mt-0 mb-0">
+    <app-footer></app-footer>
+  </footer>
+
+</div>

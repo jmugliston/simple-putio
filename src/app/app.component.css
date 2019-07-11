@@ -1,0 +1,40 @@
+.container {
+  height: 500px;
+  width:570px;
+  overflow-y: auto;
+  padding-left: 0;
+  padding-right: 0;
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.container-no-auth {
+  height: 75px;
+  width:570px;
+  overflow-y: auto;
+  padding-left: 0;
+  padding-right: 0;
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.footer-container {
+  height: 25px;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.check-column {
+  min-width: 100px;
+}
+
+.size-column {
+  min-width: 110px;
+}
+
+.nav>li>a {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
