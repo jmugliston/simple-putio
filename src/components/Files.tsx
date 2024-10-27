@@ -28,9 +28,6 @@ function Files({ api }: { api: ApiService }) {
   const currentFolderName =
     breadcrumbs.length > 0 ? breadcrumbs[breadcrumbs.length - 1].name : "";
 
-  /*
-   * Selecting all files in the table (checkbox)
-   */
   const selectAllFiles = (checked: boolean) => {
     if (checked) {
       setSelectedFileIds(files.map((file) => file.id));
@@ -39,18 +36,12 @@ function Files({ api }: { api: ApiService }) {
     }
   };
 
-  /*
-   * Selecting a file in the table (checkbox)
-   */
   const selectFile = (file: IFile, checked: boolean) => {
     setSelectedFileIds((prev) =>
       checked ? [...prev, file.id] : prev.filter((id) => id !== file.id)
     );
   };
 
-  /*
-   * Clicking a file or folder in the table
-   */
   const clickFile = (file: IFile) => {
     if (file.file_type === "FOLDER") {
       // Clicking a folder navigates to it
@@ -66,17 +57,11 @@ function Files({ api }: { api: ApiService }) {
     }
   };
 
-  /**
-   * Refreshes the current file list
-   */
   const refreshFileList = async () => {
     const files = await api.getFiles(currentFolderId);
     setFiles(files);
   };
 
-  /*
-   * Generic function to run an action and handle errors
-   */
   const runAction = async (action: () => Promise<unknown>) => {
     setActionError(null);
     setActionInProgress(true);
@@ -91,9 +76,6 @@ function Files({ api }: { api: ApiService }) {
     }
   };
 
-  /*
-   * Navigates up one level in the folder structure
-   */
   const navigateUp = async () => {
     setSelectedFileIds([]);
     if (breadcrumbs.length > 0) {

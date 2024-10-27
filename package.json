@@ -2,7 +2,6 @@
   "name": "simple-putio",
   "version": "2.0.0",
   "description": "Simple put.io Chrome extension",
-  "main": "index.js",
   "type": "module",
   "repository": {
     "type": "git",
@@ -25,6 +24,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "build:watch": "tsc -b && vite build --watch",
+    "build:release": "./release.sh",
     "lint": "eslint .",
     "preview": "vite preview"
   },
