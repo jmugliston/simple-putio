@@ -39,7 +39,7 @@ function MoveFile({
     };
 
     fetchFolders();
-  }, [api, currentFolderId]);
+  }, [api, currentFolderId, modalIsOpen]);
 
   return (
     <Modal
