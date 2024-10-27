@@ -2,8 +2,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import Modal from "react-modal";
 
-// import "./styles.css";
-
 Modal.setAppElement("#root");
 
 function AddFolder({
