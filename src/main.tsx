@@ -21,8 +21,9 @@ import { faGithub } from "@fortawesome/free-brands-svg-icons";
 
 import App from "./App.tsx";
 
+import "pretty-checkbox/dist/pretty-checkbox.min.css";
+import 'react-tooltip/dist/react-tooltip.css'
 import "./index.css";
-import "../node_modules/pretty-checkbox/dist/pretty-checkbox.min.css";
 
 library.add(
   faTrashCan,

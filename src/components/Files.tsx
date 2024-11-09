@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IFile } from "@putdotio/api-client";
 import { Checkbox } from "pretty-checkbox-react";
 import TimeAgo from "react-timeago";
+import { Tooltip } from 'react-tooltip'
 
 import ApiService from "../services/Api";
 import Spinner from "./Loading";
@@ -178,15 +179,27 @@ function Files({ api }: { api: ApiService }) {
                     <Spinner />
                   </div>
                 )}
+                <Tooltip
+                  id="tooltip-go-up"
+                  content="Move up a directory"
+                />
                 {currentFolderId !== 0 && (
                   <button
+                    data-tooltip-id="tooltip-go-up"
+                    data-tooltip-content="Move up a directory"
                     onClick={navigateUp}
                     className="mx-1 py-2 border rounded bg-amber-300 text-gray-700 hover:bg-gray-500 hover:text-white w-8"
                   >
                     <FontAwesomeIcon icon={["fas", "turn-up"]} />
                   </button>
                 )}
+                <Tooltip
+                  id="tooltip-delete"
+                  content="Delete files"
+                />
                 <button
+                  data-tooltip-id="tooltip-delete"
+                  data-tooltip-content="Delete files"
                   disabled={selectedFileIds.length === 0 || actionInProgress}
                   onClick={async () => {
                     await runAction(() => api.deleteFiles(selectedFileIds));
@@ -197,7 +210,13 @@ function Files({ api }: { api: ApiService }) {
                 >
                   <FontAwesomeIcon icon={["far", "trash-can"]} />
                 </button>
+                <Tooltip
+                  id="tooltip-zip"
+                  content="Zip and download"
+                />
                 <button
+                  data-tooltip-id="tooltip-zip"
+                  data-tooltip-content="Zip and download"
                   disabled={selectedFileIds.length === 0 || actionInProgress}
                   onClick={() =>
                     runAction(() => api.zipAndDownloadFiles(selectedFileIds))
@@ -206,7 +225,13 @@ function Files({ api }: { api: ApiService }) {
                 >
                   <FontAwesomeIcon icon={["far", "file-zipper"]} />
                 </button>
+                <Tooltip
+                  id="tooltip-copy-url"
+                  content="Copy download URL(s)"
+                />
                 <button
+                  data-tooltip-id="tooltip-copy-url"
+                  data-tooltip-content="Copy download URL(s)"
                   disabled={selectedFileIds.length === 0 || actionInProgress}
                   onClick={() => {
                     const urls = selectedFileIds.map((id) =>
@@ -218,14 +243,26 @@ function Files({ api }: { api: ApiService }) {
                 >
                   <FontAwesomeIcon icon={["fas", "link"]} />
                 </button>
+                <Tooltip
+                  id="tooltip-move-folder"
+                  content="Move file/folder"
+                />
                 <button
+                  data-tooltip-id="tooltip-move-folder"
+                  data-tooltip-content="Move file/folder"
                   disabled={selectedFileIds.length === 0 || actionInProgress}
                   onClick={() => setMoveFileModalOpen(true)}
                   className="w-8 mx-1 py-2 border rounded border-gray-400 text-gray-700 bg-white hover:bg-gray-500 hover:text-white disabled:pointer-events-none disabled:border-gray-300 disabled:text-gray-300"
                 >
                   <FontAwesomeIcon icon={["fas", "circle-arrow-right"]} />
                 </button>
+                <Tooltip
+                  id="tooltip-add-folder"
+                  content="Add folder"
+                />
                 <button
+                  data-tooltip-id="tooltip-add-folder"
+                  data-tooltip-content="Add folder"
                   onClick={() => setAddFolderModalOpen(true)}
                   className="w-8 mx-1 py-2 border rounded border-gray-400 text-gray-700 bg-white hover:bg-gray-500 hover:text-white disabled:pointer-events-none disabled:border-gray-300 disabled:text-gray-300"
                 >
