@@ -1,4 +1,4 @@
-import PutioAPI from "@putdotio/api-client";
+import PutioAPI, { IFile } from "@putdotio/api-client";
 
 import { BASE_URL, CLIENT_ID } from "../constants";
 import { delay } from "../helpers";
@@ -120,6 +120,29 @@ class ApiService {
     const url = new URL(`/v2/files/${id}/download`, BASE_URL);
     url.searchParams.append("oauth_token", this.api.token!);
     return url.toString();
+  }
+
+  async getAllFilesInFolder(folderId: number) {
+    const files: IFile[] = await this.getFiles(folderId);
+
+    const folderIds = files.filter((file) => file.file_type === "FOLDER").map((file) => file.id);
+    const fileIds = files.filter((file) => file.file_type === "FILE").map((file) => file.id);
+
+    for (const id of folderIds) {
+      const subFileIds = await this.getAllFilesInFolder(id);
+      fileIds.push(...subFileIds);
+    }
+
+    return fileIds;
+  }
+
+  async getDownloadURLs(fileIds: number[], folderIds: number[]) {
+    const urls = fileIds.map((id) => this.getDownloadURL(id));
+    for (const folderId of folderIds) {
+      const subFileIds = await this.getAllFilesInFolder(folderId)
+      urls.push(...subFileIds.map((id) => this.getDownloadURL(id)));
+    }
+    return urls;
   }
 
   async downloadFile(id: number) {
