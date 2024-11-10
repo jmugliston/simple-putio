@@ -63,18 +63,22 @@ function Files({ api }: { api: ApiService }) {
     setFiles(files);
   };
 
-  const runAction = async (action: () => Promise<unknown>) => {
+  const runAction = async (action: () => Promise<unknown>, unselectOnFinish = true): Promise<unknown> => {
     setActionError(null);
     setActionInProgress(true);
+    let res = null;
     try {
-      await action();
+      res = await action();
     } catch (error: unknown) {
       setActionError((error as Error).message);
     } finally {
-      setSelectedFileIds([]);
+      if (unselectOnFinish) {
+        setSelectedFileIds([]);
+      }
       setActionInProgress(false);
       refreshFileList();
     }
+    return res
   };
 
   const navigateUp = async () => {
@@ -162,8 +166,8 @@ function Files({ api }: { api: ApiService }) {
               <div className="text-base text-amber-500">
                 <Checkbox
                   color="warning"
-                  readOnly
-                  onClick={(e: React.MouseEvent<HTMLInputElement>) =>
+                  checked={selectedFileIds.length === files.length}
+                  onChange={(e) =>
                     selectAllFiles(e.currentTarget.checked)
                   }
                 />
@@ -233,11 +237,20 @@ function Files({ api }: { api: ApiService }) {
                   data-tooltip-id="tooltip-copy-url"
                   data-tooltip-content="Copy download URL(s)"
                   disabled={selectedFileIds.length === 0 || actionInProgress}
-                  onClick={() => {
-                    const urls = selectedFileIds.map((id) =>
-                      api.getDownloadURL(id)
-                    );
-                    navigator.clipboard.writeText(urls.join("\n"));
+                  onClick={async () => {
+                    const [fileIds, folderIds] = files.reduce((acc, file) => {
+                      if (selectedFileIds.includes(file.id)) {
+                        if (file.file_type === "FILE") {
+                          acc[0].push(file.id);
+                        }
+                        if (file.file_type === "FOLDER") {
+                          acc[1].push(file.id);
+                        }
+                      }
+                      return acc;
+                    }, [[], []] as [number[], number[]]);
+                    const urls = await runAction(() => api.getDownloadURLs(fileIds, folderIds), false)
+                    navigator.clipboard.writeText((urls as string[]).join("\n"));
                   }}
                   className="w-8 mx-1 py-2 border rounded border-gray-400 text-gray-700 bg-white hover:bg-gray-500 hover:text-white disabled:pointer-events-none disabled:border-gray-300 disabled:text-gray-300"
                 >
