@@ -145,6 +145,7 @@ function MoveFile({
           <button
             onClick={() => {
               const folder = currentFolderId;
+              console.log("folder", folder);
               setBreadcrumbs([]);
               closeModal(folder);
             }}

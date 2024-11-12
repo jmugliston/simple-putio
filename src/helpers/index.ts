@@ -31,7 +31,7 @@ const customTimeFormatter = (
   unit: string,
   suffix: string,
   epochSeconds: number,
-  nextFormatter: any
+  nextFormatter: any,
 ) => {
   if (unit === "second" && value < 60) {
     return "< 1 minute ago";

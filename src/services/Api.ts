@@ -125,8 +125,12 @@ class ApiService {
   async getAllFilesInFolder(folderId: number) {
     const files: IFile[] = await this.getFiles(folderId);
 
-    const folderIds = files.filter((file) => file.file_type === "FOLDER").map((file) => file.id);
-    const fileIds = files.filter((file) => file.file_type === "FILE").map((file) => file.id);
+    const folderIds = files
+      .filter((file) => file.file_type === "FOLDER")
+      .map((file) => file.id);
+    const fileIds = files
+      .filter((file) => file.file_type === "FILE")
+      .map((file) => file.id);
 
     for (const id of folderIds) {
       const subFileIds = await this.getAllFilesInFolder(id);
@@ -139,7 +143,7 @@ class ApiService {
   async getDownloadURLs(fileIds: number[], folderIds: number[]) {
     const urls = fileIds.map((id) => this.getDownloadURL(id));
     for (const folderId of folderIds) {
-      const subFileIds = await this.getAllFilesInFolder(folderId)
+      const subFileIds = await this.getAllFilesInFolder(folderId);
       urls.push(...subFileIds.map((id) => this.getDownloadURL(id)));
     }
     return urls;

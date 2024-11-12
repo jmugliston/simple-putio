@@ -103,7 +103,7 @@ function Transfers({ api }: { api: ApiService }) {
                           formatter={customTimeFormatter}
                         />
                       ) : (
-                        `${transfer.percent_done}%`
+                        `${transfer.percent_done || '0'}%`
                       )}
                       )
                     </div>
