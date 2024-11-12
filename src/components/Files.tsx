@@ -3,20 +3,24 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IFile } from "@putdotio/api-client";
 import { Checkbox } from "pretty-checkbox-react";
 import TimeAgo from "react-timeago";
-import { Tooltip } from 'react-tooltip'
+import { Tooltip } from "react-tooltip";
 
-import ApiService from "../services/Api";
 import Spinner from "./Loading";
 import AddFolder from "./modals/AddFolder";
-import { customTimeFormatter, formatBytes, truncate } from "../helpers";
 import MoveFile from "./modals/MoveFile";
+import GetDownloadLinks from "./modals/GetDownloadLinks";
+
+import ApiService from "../services/Api";
+import { customTimeFormatter, formatBytes, truncate } from "../helpers";
 
 function Files({ api }: { api: ApiService }) {
   const [initialLoad, setInitialLoad] = useState(true);
   const [files, setFiles] = useState<IFile[]>([]);
   const [breadcrumbs, setBreadcrumbs] = useState<IFile[]>([]);
   const [selectedFileIds, setSelectedFileIds] = useState<number[]>([]);
+  const [fileLinks, setFileLinks] = useState<string[]>([]);
 
+  const [getDownloadLinksModalOpen, setGetDownloadLinksModalOpen] = useState(false);
   const [addFolderModalOpen, setAddFolderModalOpen] = useState(false);
   const [moveFileModalOpen, setMoveFileModalOpen] = useState(false);
 
@@ -39,7 +43,7 @@ function Files({ api }: { api: ApiService }) {
 
   const selectFile = (file: IFile, checked: boolean) => {
     setSelectedFileIds((prev) =>
-      checked ? [...prev, file.id] : prev.filter((id) => id !== file.id)
+      checked ? [...prev, file.id] : prev.filter((id) => id !== file.id),
     );
   };
 
@@ -63,7 +67,10 @@ function Files({ api }: { api: ApiService }) {
     setFiles(files);
   };
 
-  const runAction = async (action: () => Promise<unknown>, unselectOnFinish = true): Promise<unknown> => {
+  const runAction = async (
+    action: () => Promise<unknown>,
+    unselectOnFinish = true,
+  ): Promise<unknown> => {
     setActionError(null);
     setActionInProgress(true);
     let res = null;
@@ -78,7 +85,7 @@ function Files({ api }: { api: ApiService }) {
       setActionInProgress(false);
       refreshFileList();
     }
-    return res
+    return res;
   };
 
   const navigateUp = async () => {
@@ -119,12 +126,20 @@ function Files({ api }: { api: ApiService }) {
 
   return (
     <div className="overflow-x-hidden" style={{ maxHeight: "425px" }}>
+      <GetDownloadLinks
+        closeModal={() => {
+          setGetDownloadLinksModalOpen(false);
+          setFileLinks([]);
+        }}
+        modalIsOpen={getDownloadLinksModalOpen}
+        links={fileLinks}
+      />
       <AddFolder
         closeModal={async (folderName?: string) => {
           setAddFolderModalOpen(false);
           if (folderName && folderName !== "") {
             await runAction(() =>
-              api.createFolder(folderName, currentFolderId)
+              api.createFolder(folderName, currentFolderId),
             );
           }
         }}
@@ -135,7 +150,7 @@ function Files({ api }: { api: ApiService }) {
         fileIds={selectedFileIds}
         closeModal={async (folderId?: number) => {
           setMoveFileModalOpen(false);
-          if (folderId) {
+          if (folderId !== undefined) {
             setSelectedFileIds([]);
             await runAction(() => api.moveFiles(selectedFileIds, folderId));
           }
@@ -166,10 +181,11 @@ function Files({ api }: { api: ApiService }) {
               <div className="text-base text-amber-500">
                 <Checkbox
                   color="warning"
-                  checked={selectedFileIds.length === files.length}
-                  onChange={(e) =>
-                    selectAllFiles(e.currentTarget.checked)
+                  checked={
+                    selectedFileIds.length > 0 &&
+                    selectedFileIds.length === files.length
                   }
+                  onChange={(e) => selectAllFiles(e.currentTarget.checked)}
                 />
               </div>
               <div>
@@ -183,10 +199,7 @@ function Files({ api }: { api: ApiService }) {
                     <Spinner />
                   </div>
                 )}
-                <Tooltip
-                  id="tooltip-go-up"
-                  content="Move up a directory"
-                />
+                <Tooltip id="tooltip-go-up" content="Move up a directory" />
                 {currentFolderId !== 0 && (
                   <button
                     data-tooltip-id="tooltip-go-up"
@@ -197,10 +210,7 @@ function Files({ api }: { api: ApiService }) {
                     <FontAwesomeIcon icon={["fas", "turn-up"]} />
                   </button>
                 )}
-                <Tooltip
-                  id="tooltip-delete"
-                  content="Delete files"
-                />
+                <Tooltip id="tooltip-delete" content="Delete files" />
                 <button
                   data-tooltip-id="tooltip-delete"
                   data-tooltip-content="Delete files"
@@ -214,10 +224,7 @@ function Files({ api }: { api: ApiService }) {
                 >
                   <FontAwesomeIcon icon={["far", "trash-can"]} />
                 </button>
-                <Tooltip
-                  id="tooltip-zip"
-                  content="Zip and download"
-                />
+                <Tooltip id="tooltip-zip" content="Zip and download" />
                 <button
                   data-tooltip-id="tooltip-zip"
                   data-tooltip-content="Zip and download"
@@ -229,37 +236,38 @@ function Files({ api }: { api: ApiService }) {
                 >
                   <FontAwesomeIcon icon={["far", "file-zipper"]} />
                 </button>
-                <Tooltip
-                  id="tooltip-copy-url"
-                  content="Copy download URL(s)"
-                />
+                <Tooltip id="tooltip-get-links" content="Get download links" />
                 <button
-                  data-tooltip-id="tooltip-copy-url"
-                  data-tooltip-content="Copy download URL(s)"
+                  data-tooltip-id="tooltip-get-links"
+                  data-tooltip-content="Get download links"
                   disabled={selectedFileIds.length === 0 || actionInProgress}
                   onClick={async () => {
-                    const [fileIds, folderIds] = files.reduce((acc, file) => {
-                      if (selectedFileIds.includes(file.id)) {
-                        if (file.file_type === "FILE") {
-                          acc[0].push(file.id);
+                    const [fileIds, folderIds] = files.reduce(
+                      (acc, file) => {
+                        if (selectedFileIds.includes(file.id)) {
+                          if (file.file_type === "FILE") {
+                            acc[0].push(file.id);
+                          }
+                          if (file.file_type === "FOLDER") {
+                            acc[1].push(file.id);
+                          }
                         }
-                        if (file.file_type === "FOLDER") {
-                          acc[1].push(file.id);
-                        }
-                      }
-                      return acc;
-                    }, [[], []] as [number[], number[]]);
-                    const urls = await runAction(() => api.getDownloadURLs(fileIds, folderIds), false)
-                    navigator.clipboard.writeText((urls as string[]).join("\n"));
+                        return acc;
+                      },
+                      [[], []] as [number[], number[]],
+                    );
+                    const urls = (await runAction(
+                      () => api.getDownloadURLs(fileIds, folderIds),
+                      false,
+                    )) as string[];
+                    setFileLinks(urls);
+                    setGetDownloadLinksModalOpen(true);
                   }}
                   className="w-8 mx-1 py-2 border rounded border-gray-400 text-gray-700 bg-white hover:bg-gray-500 hover:text-white disabled:pointer-events-none disabled:border-gray-300 disabled:text-gray-300"
                 >
                   <FontAwesomeIcon icon={["fas", "link"]} />
                 </button>
-                <Tooltip
-                  id="tooltip-move-folder"
-                  content="Move file/folder"
-                />
+                <Tooltip id="tooltip-move-folder" content="Move file/folder" />
                 <button
                   data-tooltip-id="tooltip-move-folder"
                   data-tooltip-content="Move file/folder"
@@ -269,10 +277,7 @@ function Files({ api }: { api: ApiService }) {
                 >
                   <FontAwesomeIcon icon={["fas", "circle-arrow-right"]} />
                 </button>
-                <Tooltip
-                  id="tooltip-add-folder"
-                  content="Add folder"
-                />
+                <Tooltip id="tooltip-add-folder" content="Add folder" />
                 <button
                   data-tooltip-id="tooltip-add-folder"
                   data-tooltip-content="Add folder"

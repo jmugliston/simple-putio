@@ -10,7 +10,7 @@ function useApiToken() {
     url.searchParams.append("response_type", "token");
     url.searchParams.append(
       "redirect_uri",
-      `https://${chrome.runtime.id}.chromiumapp.org/oauth`
+      `https://${chrome.runtime.id}.chromiumapp.org/oauth`,
     );
 
     chrome.identity.launchWebAuthFlow(
@@ -26,7 +26,7 @@ function useApiToken() {
         const token = responseUrl.split("=")[1];
         chrome.storage.sync.set({ accessToken: token });
         setApiToken(token);
-      }
+      },
     );
   };
 

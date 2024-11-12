@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "simple put.io",
   "description": "Send download links directly to Put.io.",
-  "version": "2.2",
+  "version": "2.3",
   "icons": {
     "16": "icons/icon-16.png",
     "19": "icons/icon-19.png",

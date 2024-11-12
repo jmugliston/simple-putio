@@ -16,13 +16,14 @@ import {
   faCircleExclamation,
   faX,
   faChevronRight,
+  faClipboard,
 } from "@fortawesome/free-solid-svg-icons";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 
 import App from "./App.tsx";
 
 import "pretty-checkbox/dist/pretty-checkbox.min.css";
-import 'react-tooltip/dist/react-tooltip.css'
+import "react-tooltip/dist/react-tooltip.css";
 import "./index.css";
 
 library.add(
@@ -38,11 +39,12 @@ library.add(
   faTurnUp,
   faCircleExclamation,
   faX,
-  faChevronRight
+  faChevronRight,
+  faClipboard,
 );
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <App />
-  </StrictMode>
+  </StrictMode>,
 );
