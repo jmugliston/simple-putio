@@ -125,11 +125,12 @@ class ApiService {
   async getAllFilesInFolder(folderId: number) {
     const files: IFile[] = await this.getFiles(folderId);
 
+    const fileIds = files
+      .filter((file) => file.file_type !== "FOLDER")
+      .map((file) => file.id);
+
     const folderIds = files
       .filter((file) => file.file_type === "FOLDER")
-      .map((file) => file.id);
-    const fileIds = files
-      .filter((file) => file.file_type === "FILE")
       .map((file) => file.id);
 
     for (const id of folderIds) {
