@@ -245,11 +245,10 @@ function Files({ api }: { api: ApiService }) {
                     const [fileIds, folderIds] = files.reduce(
                       (acc, file) => {
                         if (selectedFileIds.includes(file.id)) {
-                          if (file.file_type === "FILE") {
-                            acc[0].push(file.id);
-                          }
                           if (file.file_type === "FOLDER") {
                             acc[1].push(file.id);
+                          } else {
+                            acc[0].push(file.id);
                           }
                         }
                         return acc;
