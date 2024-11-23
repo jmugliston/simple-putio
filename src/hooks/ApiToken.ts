@@ -10,7 +10,7 @@ function useApiToken() {
     url.searchParams.append("response_type", "token");
     url.searchParams.append(
       "redirect_uri",
-      `https://${chrome.runtime.id}.chromiumapp.org/oauth`,
+      `https://${chrome.runtime.id}.chromiumapp.org/oauth`
     );
 
     chrome.identity.launchWebAuthFlow(
@@ -19,6 +19,7 @@ function useApiToken() {
         interactive: true,
       },
       (responseUrl) => {
+        /* v8 ignore next 4 */
         if (!responseUrl) {
           console.warn("No response URL from auth flow");
           return;
@@ -26,7 +27,7 @@ function useApiToken() {
         const token = responseUrl.split("=")[1];
         chrome.storage.sync.set({ accessToken: token });
         setApiToken(token);
-      },
+      }
     );
   };
 
@@ -35,6 +36,7 @@ function useApiToken() {
       chrome.storage.sync.get("accessToken", ({ accessToken: apiToken }) => {
         setApiToken(apiToken);
       });
+      /* v8 ignore next 4 */
     } else {
       const token = import.meta.env.VITE_ACCESS_TOKEN || "test";
       setApiToken(token);
@@ -45,3 +47,4 @@ function useApiToken() {
 }
 
 export default useApiToken;
+export { useApiToken };

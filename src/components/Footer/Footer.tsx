@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
 
-import ApiService from "../services/Api";
+import ApiService from "../../services/Api";
 
-function Footer({ api }: { api: ApiService }) {
+export interface FooterProps {
+  api: ApiService;
+}
+
+function Footer({ api }: FooterProps) {
   const [diskInfo, setDiskInfo] = useState<{ used: number; free: number }>({
     used: 0,
     free: 0,
@@ -38,3 +42,4 @@ function Footer({ api }: { api: ApiService }) {
 }
 
 export default Footer;
+export { Footer };

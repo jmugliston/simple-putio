@@ -2,15 +2,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import Modal from "react-modal";
 
-Modal.setAppElement("#root");
+import { modalStyles } from "../styles";
 
-function AddFolder({
-  closeModal,
-  modalIsOpen,
-}: {
+export interface AddFolderProps {
   closeModal: (folderName?: string) => void;
   modalIsOpen: boolean;
-}) {
+}
+
+function AddFolder({ closeModal, modalIsOpen }: AddFolderProps) {
   const [folderName, setFolderName] = useState("");
 
   const onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -24,27 +23,14 @@ function AddFolder({
     <Modal
       isOpen={modalIsOpen}
       onRequestClose={() => closeModal()}
-      style={{
-        content: {
-          top: "10%",
-          left: "10%",
-          right: "auto",
-          bottom: "auto",
-          marginRight: "-10%",
-          transform: "translate(-6%, -10%)",
-          width: "90%",
-          padding: 0,
-        },
-        overlay: {
-          zIndex: 999,
-        },
-      }}
+      style={modalStyles}
       contentLabel="Add Folder"
     >
       <div className="">
         <div className="flex items-center">
           <h2 className="grow m-4 font-semibold text-2xl">Add folder</h2>
           <button
+            aria-label="Close"
             className="mx-4 p-2 text-xs"
             aria-description="close"
             onClick={() => closeModal()}
@@ -60,10 +46,11 @@ function AddFolder({
                 <FontAwesomeIcon icon={["far", "folder"]} />
               </span>
               <input
+                aria-label="Folder name"
                 type="text"
                 id="folder-name"
                 value={folderName}
-                onInput={(e) =>
+                onChange={(e) =>
                   setFolderName((e.target as HTMLInputElement).value)
                 }
                 className="rounded-none rounded-e-lg bg-white border text-gray-900 focus:outline-none focus:border-amber-300 focus:ring-1 focus:ring-amber-300 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5"
@@ -87,3 +74,4 @@ function AddFolder({
 }
 
 export default AddFolder;
+export { AddFolder };

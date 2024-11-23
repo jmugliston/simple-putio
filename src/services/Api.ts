@@ -4,7 +4,7 @@ import { BASE_URL, CLIENT_ID } from "../constants";
 import { delay } from "../helpers";
 
 class ApiService {
-  private api;
+  api;
 
   constructor(apiToken: string) {
     this.api = new PutioAPI({ clientID: CLIENT_ID });
@@ -158,3 +158,4 @@ class ApiService {
 }
 
 export default ApiService;
+export { ApiService };

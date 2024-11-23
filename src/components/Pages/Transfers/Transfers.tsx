@@ -2,38 +2,19 @@ import { useEffect, useState } from "react";
 import { Transfer } from "@putdotio/api-client";
 import TimeAgo from "react-timeago";
 
-import ApiService from "../services/Api";
-import { customTimeFormatter, truncate } from "../helpers";
+import { ApiService } from "../../../services/Api";
+import {
+  customTimeFormatter,
+  statusColourMap,
+  statusMap,
+  truncate,
+} from "../../../helpers";
 
-const statusMap = {
-  COMPLETED: "Completed",
-  COMPLETING: "Completing",
-  DOWNLOADING: "Downloading",
-  ERROR: "Error",
-  IN_QUEUE: "In Queue",
-  PREPARING_DOWNLOAD: "Preparing Download",
-  SEEDING: "Finished & Seeding",
-  STOPPING: "Stopping",
-  WAITING: "Waiting",
-  WAITING_FOR_COMPLETE_QUEUE: "Waiting for Complete Queue",
-  WAITING_FOR_DOWNLOAD: "Waiting for Download",
-};
+export interface FilesProps {
+  api: ApiService;
+}
 
-const statusColourMap = {
-  COMPLETED: "text-green-600",
-  COMPLETING: "text-blue-500",
-  DOWNLOADING: "text-blue-500",
-  ERROR: "text-red-500",
-  IN_QUEUE: "text-amber-500",
-  PREPARING_DOWNLOAD: "text-blue-500",
-  SEEDING: "text-green-600",
-  STOPPING: "text-amber-500",
-  WAITING: "text-blue-500",
-  WAITING_FOR_COMPLETE_QUEUE: "text-blue-500",
-  WAITING_FOR_DOWNLOAD: "text-blue-500",
-};
-
-function Transfers({ api }: { api: ApiService }) {
+function Transfers({ api }: FilesProps) {
   const [transfers, setTransfers] = useState<Transfer[]>([]);
 
   useEffect(() => {
@@ -103,7 +84,7 @@ function Transfers({ api }: { api: ApiService }) {
                           formatter={customTimeFormatter}
                         />
                       ) : (
-                        `${transfer.percent_done || '0'}%`
+                        `${transfer.percent_done || "0"}%`
                       )}
                       )
                     </div>
@@ -119,3 +100,4 @@ function Transfers({ api }: { api: ApiService }) {
 }
 
 export default Transfers;
+export { Transfers };

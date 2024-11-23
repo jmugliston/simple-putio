@@ -3,42 +3,31 @@ import Modal from "react-modal";
 import { Tooltip } from "react-tooltip";
 import copy from "copy-to-clipboard";
 
-Modal.setAppElement("#root");
+import { modalStyles } from "../styles";
+
+export interface GetDownloadLinksProps {
+  closeModal: (folderName?: string) => void;
+  modalIsOpen: boolean;
+  links: string[];
+}
 
 function GetDownloadLinks({
   closeModal,
   modalIsOpen,
   links,
-}: {
-  closeModal: (folderName?: string) => void;
-  modalIsOpen: boolean;
-  links: string[];
-}) {
+}: GetDownloadLinksProps) {
   return (
     <Modal
       isOpen={modalIsOpen}
       onRequestClose={() => closeModal()}
-      style={{
-        content: {
-          top: "10%",
-          left: "10%",
-          right: "auto",
-          bottom: "auto",
-          marginRight: "-10%",
-          transform: "translate(-6%, -10%)",
-          width: "90%",
-          padding: 0,
-        },
-        overlay: {
-          zIndex: 999,
-        },
-      }}
+      style={modalStyles}
       contentLabel="Download Links"
     >
       <div>
         <div className="flex items-center">
           <h2 className="grow m-4 font-semibold text-2xl">Download Links</h2>
           <button
+            aria-label="Close"
             className="mx-4 p-2 text-xs"
             aria-description="close"
             onClick={() => closeModal()}
@@ -51,6 +40,7 @@ function GetDownloadLinks({
           <div className="my-2 mx-1 ml-auto text-end">
             <Tooltip id="tooltip-copy" openOnClick={true} content="Copied!" />
             <button
+              aria-label="Copy"
               data-tooltip-id="tooltip-copy"
               data-tooltip-content="Copied!"
               onClick={() => copy(links.join("\n"))}
@@ -74,3 +64,4 @@ function GetDownloadLinks({
 }
 
 export default GetDownloadLinks;
+export { GetDownloadLinks };

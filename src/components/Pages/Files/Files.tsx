@@ -5,13 +5,11 @@ import { Checkbox } from "pretty-checkbox-react";
 import TimeAgo from "react-timeago";
 import { Tooltip } from "react-tooltip";
 
-import Spinner from "./Loading";
-import AddFolder from "./modals/AddFolder";
-import MoveFile from "./modals/MoveFile";
-import GetDownloadLinks from "./modals/GetDownloadLinks";
+import { Spinner } from "../../Loading/Spinner";
+import { AddFolder, GetDownloadLinks, MoveFile } from "../../Modals";
 
-import ApiService from "../services/Api";
-import { customTimeFormatter, formatBytes, truncate } from "../helpers";
+import ApiService from "../../../services/Api";
+import { customTimeFormatter, formatBytes, truncate } from "../../../helpers";
 
 function Files({ api }: { api: ApiService }) {
   const [initialLoad, setInitialLoad] = useState(true);
@@ -20,7 +18,8 @@ function Files({ api }: { api: ApiService }) {
   const [selectedFileIds, setSelectedFileIds] = useState<number[]>([]);
   const [fileLinks, setFileLinks] = useState<string[]>([]);
 
-  const [getDownloadLinksModalOpen, setGetDownloadLinksModalOpen] = useState(false);
+  const [getDownloadLinksModalOpen, setGetDownloadLinksModalOpen] =
+    useState(false);
   const [addFolderModalOpen, setAddFolderModalOpen] = useState(false);
   const [moveFileModalOpen, setMoveFileModalOpen] = useState(false);
 
@@ -43,7 +42,7 @@ function Files({ api }: { api: ApiService }) {
 
   const selectFile = (file: IFile, checked: boolean) => {
     setSelectedFileIds((prev) =>
-      checked ? [...prev, file.id] : prev.filter((id) => id !== file.id),
+      checked ? [...prev, file.id] : prev.filter((id) => id !== file.id)
     );
   };
 
@@ -69,7 +68,7 @@ function Files({ api }: { api: ApiService }) {
 
   const runAction = async (
     action: () => Promise<unknown>,
-    unselectOnFinish = true,
+    unselectOnFinish = true
   ): Promise<unknown> => {
     setActionError(null);
     setActionInProgress(true);
@@ -139,7 +138,7 @@ function Files({ api }: { api: ApiService }) {
           setAddFolderModalOpen(false);
           if (folderName && folderName !== "") {
             await runAction(() =>
-              api.createFolder(folderName, currentFolderId),
+              api.createFolder(folderName, currentFolderId)
             );
           }
         }}
@@ -163,7 +162,8 @@ function Files({ api }: { api: ApiService }) {
           <div className="grow w-100">Error: {actionError}</div>
           <div className="mx-3">
             <button
-              aria-description="close"
+              aria-label="Close error"
+              aria-description="Close the error message"
               onClick={() => setActionError(null)}
             >
               <FontAwesomeIcon icon={["fas", "x"]} />
@@ -180,6 +180,8 @@ function Files({ api }: { api: ApiService }) {
             >
               <div className="text-base text-amber-500">
                 <Checkbox
+                  aria-label="Select all files"
+                  aria-description="Select all files in the current folder"
                   color="warning"
                   checked={
                     selectedFileIds.length > 0 &&
@@ -202,6 +204,7 @@ function Files({ api }: { api: ApiService }) {
                 <Tooltip id="tooltip-go-up" content="Move up a directory" />
                 {currentFolderId !== 0 && (
                   <button
+                    aria-label="Move up a directory"
                     data-tooltip-id="tooltip-go-up"
                     data-tooltip-content="Move up a directory"
                     onClick={navigateUp}
@@ -212,6 +215,7 @@ function Files({ api }: { api: ApiService }) {
                 )}
                 <Tooltip id="tooltip-delete" content="Delete files" />
                 <button
+                  aria-label="Delete files"
                   data-tooltip-id="tooltip-delete"
                   data-tooltip-content="Delete files"
                   disabled={selectedFileIds.length === 0 || actionInProgress}
@@ -226,6 +230,7 @@ function Files({ api }: { api: ApiService }) {
                 </button>
                 <Tooltip id="tooltip-zip" content="Zip and download" />
                 <button
+                  aria-label="Zip and download"
                   data-tooltip-id="tooltip-zip"
                   data-tooltip-content="Zip and download"
                   disabled={selectedFileIds.length === 0 || actionInProgress}
@@ -238,6 +243,7 @@ function Files({ api }: { api: ApiService }) {
                 </button>
                 <Tooltip id="tooltip-get-links" content="Get download links" />
                 <button
+                  aria-label="Get download links"
                   data-tooltip-id="tooltip-get-links"
                   data-tooltip-content="Get download links"
                   disabled={selectedFileIds.length === 0 || actionInProgress}
@@ -253,11 +259,11 @@ function Files({ api }: { api: ApiService }) {
                         }
                         return acc;
                       },
-                      [[], []] as [number[], number[]],
+                      [[], []] as [number[], number[]]
                     );
                     const urls = (await runAction(
                       () => api.getDownloadURLs(fileIds, folderIds),
-                      false,
+                      false
                     )) as string[];
                     setFileLinks(urls);
                     setGetDownloadLinksModalOpen(true);
@@ -268,6 +274,7 @@ function Files({ api }: { api: ApiService }) {
                 </button>
                 <Tooltip id="tooltip-move-folder" content="Move file/folder" />
                 <button
+                  aria-label="Move file/folder"
                   data-tooltip-id="tooltip-move-folder"
                   data-tooltip-content="Move file/folder"
                   disabled={selectedFileIds.length === 0 || actionInProgress}
@@ -278,6 +285,7 @@ function Files({ api }: { api: ApiService }) {
                 </button>
                 <Tooltip id="tooltip-add-folder" content="Add folder" />
                 <button
+                  aria-label="Add folder"
                   data-tooltip-id="tooltip-add-folder"
                   data-tooltip-content="Add folder"
                   onClick={() => setAddFolderModalOpen(true)}
@@ -296,9 +304,14 @@ function Files({ api }: { api: ApiService }) {
                 key={file.id}
                 className="bg-white border-b hover:bg-gray-200 cursor-pointer"
               >
-                <td className="px-3 py-2 flex items-center content-center">
+                <td
+                  aria-description={file.name}
+                  className="px-3 py-2 flex items-center content-center"
+                >
                   <div className="text-base">
                     <Checkbox
+                      aria-label={`Select ${file.name}`}
+                      title={`Select ${file.name}`}
                       color="warning"
                       readOnly
                       checked={selectedFileIds.includes(file.id)}
@@ -336,6 +349,7 @@ function Files({ api }: { api: ApiService }) {
                   </div>
                   <div className="ml-auto text-sm">
                     <button
+                      aria-label={`Download ${file.name}`}
                       onClick={() => {
                         if (file.file_type === "FOLDER") {
                           runAction(() => api.zipAndDownloadFiles([file.id]));
@@ -364,3 +378,4 @@ function Files({ api }: { api: ApiService }) {
 }
 
 export default Files;
+export { Files };

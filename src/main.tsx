@@ -1,5 +1,7 @@
+// istanbul ignore file
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import Modal from "react-modal";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faFile,
@@ -40,11 +42,13 @@ library.add(
   faCircleExclamation,
   faX,
   faChevronRight,
-  faClipboard,
+  faClipboard
 );
+
+Modal.setAppElement("#root");
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <App />
-  </StrictMode>,
+  </StrictMode>
 );

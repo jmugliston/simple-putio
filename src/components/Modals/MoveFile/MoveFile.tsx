@@ -2,22 +2,20 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IFile } from "@putdotio/api-client";
 import { useEffect, useState } from "react";
 import Modal from "react-modal";
-import ApiService from "../../services/Api";
-import Spinner from "../Loading";
 
-Modal.setAppElement("#root");
+import { modalStyles } from "../styles";
 
-function MoveFile({
-  api,
-  fileIds,
-  closeModal,
-  modalIsOpen,
-}: {
+import ApiService from "../../../services/Api";
+import { Spinner } from "../../Loading/Spinner";
+
+export interface MoveFileProps {
   api: ApiService;
   fileIds: number[];
   closeModal: (folderId?: number) => void;
   modalIsOpen: boolean;
-}) {
+}
+
+function MoveFile({ api, fileIds, closeModal, modalIsOpen }: MoveFileProps) {
   const [folders, setFolders] = useState<IFile[]>([]);
   const [breadcrumbs, setBreadcrumbs] = useState<IFile[]>([]);
   const [navigateInProgress, setNavigateInProgress] = useState(false);
@@ -45,21 +43,7 @@ function MoveFile({
     <Modal
       isOpen={modalIsOpen}
       onRequestClose={() => closeModal()}
-      style={{
-        content: {
-          top: "10%",
-          left: "10%",
-          right: "auto",
-          bottom: "auto",
-          marginRight: "-10%",
-          transform: "translate(-6%, -10%)",
-          width: "90%",
-          padding: 0,
-        },
-        overlay: {
-          zIndex: 999,
-        },
-      }}
+      style={modalStyles}
       contentLabel="Move File"
     >
       <div className="">
@@ -68,6 +52,7 @@ function MoveFile({
             Move {fileIds.length} File{fileIds.length > 1 ? "s" : ""}
           </h2>
           <button
+            aria-label="Close"
             className="mx-4 p-2 text-xs"
             aria-description="close"
             onClick={() => closeModal()}
@@ -94,8 +79,9 @@ function MoveFile({
                     </div>
                     {breadcrumbs.map((item, idx) => (
                       <div
+                        role="button"
+                        aria-label={`breadcrumb-file-${item.id}`}
                         key={item.id}
-                        className="cursor-pointer"
                         onClick={() =>
                           setBreadcrumbs(breadcrumbs.slice(0, idx + 1))
                         }
@@ -125,9 +111,7 @@ function MoveFile({
                   <tr key={folder.id} className="cursor-pointer">
                     <td
                       className={`py-3 hover:bg-gray-100 ${fileIds.includes(folder.id) ? "text-gray-400 disabled cursor-not-allowed pointer-events-none	" : ""}`}
-                      onClick={() => {
-                        setBreadcrumbs([...breadcrumbs, folder]);
-                      }}
+                      onClick={() => setBreadcrumbs([...breadcrumbs, folder])}
                     >
                       <FontAwesomeIcon
                         icon={["far", "folder"]}
@@ -159,3 +143,4 @@ function MoveFile({
 }
 
 export default MoveFile;
+export { MoveFile };
