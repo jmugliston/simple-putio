@@ -31,7 +31,7 @@ const customTimeFormatter = (
   unit: string,
   suffix: string,
   epochSeconds: number,
-  nextFormatter: any,
+  nextFormatter: any
 ) => {
   if (unit === "second" && value < 60) {
     return "< 1 minute ago";
@@ -39,4 +39,39 @@ const customTimeFormatter = (
   return nextFormatter(value, unit, suffix, epochSeconds);
 };
 
-export { delay, formatBytes, customTimeFormatter, truncate };
+const statusMap = {
+  COMPLETED: "Completed",
+  COMPLETING: "Completing",
+  DOWNLOADING: "Downloading",
+  ERROR: "Error",
+  IN_QUEUE: "In Queue",
+  PREPARING_DOWNLOAD: "Preparing Download",
+  SEEDING: "Finished & Seeding",
+  STOPPING: "Stopping",
+  WAITING: "Waiting",
+  WAITING_FOR_COMPLETE_QUEUE: "Waiting for Complete Queue",
+  WAITING_FOR_DOWNLOAD: "Waiting for Download",
+};
+
+const statusColourMap = {
+  COMPLETED: "text-green-600",
+  COMPLETING: "text-blue-500",
+  DOWNLOADING: "text-blue-500",
+  ERROR: "text-red-500",
+  IN_QUEUE: "text-amber-500",
+  PREPARING_DOWNLOAD: "text-blue-500",
+  SEEDING: "text-green-600",
+  STOPPING: "text-amber-500",
+  WAITING: "text-blue-500",
+  WAITING_FOR_COMPLETE_QUEUE: "text-blue-500",
+  WAITING_FOR_DOWNLOAD: "text-blue-500",
+};
+
+export {
+  delay,
+  formatBytes,
+  customTimeFormatter,
+  truncate,
+  statusMap,
+  statusColourMap,
+};

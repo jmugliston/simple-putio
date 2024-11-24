@@ -1,4 +1,4 @@
-import { defineConfig } from "vite";
+import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 import { resolve } from "path";
@@ -33,6 +33,29 @@ export default defineConfig({
           }
           return "assets/[name]-[hash].js";
         },
+      },
+    },
+  },
+  test: {
+    globals: true,
+    environment: "happy-dom",
+    setupFiles: ["src/setupTest.ts"],
+    onConsoleLog(log) {
+      if (log.includes("Warning: react-modal: App element is not defined.")) {
+        return false;
+      }
+      if (log.includes("Could not find icon")) {
+        return false;
+      }
+    },
+    coverage: {
+      include: ["src/**/*"],
+      exclude: ["src/service-worker.ts", "src/main.tsx"],
+      thresholds: {
+        statements: 95,
+        branches: 95,
+        functions: 85,
+        lines: 95,
       },
     },
   },

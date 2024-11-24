@@ -1,6 +1,7 @@
 simple-putio*.zip
 .vscode
 node_modules
+coverage
 dist
 *.tsbuildinfo
 .env

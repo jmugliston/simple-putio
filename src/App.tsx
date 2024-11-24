@@ -1,15 +1,13 @@
 import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import Files from "./components/Files";
-import Transfers from "./components/Transfers";
-import Footer from "./components/Footer";
-import useApiToken from "./hooks/ApiToken";
-import ApiService from "./services/Api";
-import Spinner from "./components/Loading";
+import { Files, Transfers } from "./components/Pages";
+import { Footer } from "./components/Footer/Footer";
+import { useApiToken } from "./hooks/ApiToken";
+import { ApiService } from "./services/Api";
+import { Spinner } from "./components/Loading/Spinner";
 
 import logo from "../assets/images/putio-logo.svg";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function App() {
   const [activeTab, setActiveTab] = useState("Files");

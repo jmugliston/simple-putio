@@ -22,6 +22,8 @@
   "scripts": {
     "format": "prettier --write src/*",
     "dev": "vite",
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage",
     "build": "tsc -b && vite build",
     "build:watch": "tsc -b && vite build --watch",
     "build:release": "./release.sh",
@@ -47,6 +49,8 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.12.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.0.1",
     "@types/chrome": "^0.0.279",
     "@types/node": "^22.7.8",
     "@types/react": "^18.3.11",
@@ -54,18 +58,21 @@
     "@types/react-modal": "^3.16.3",
     "@types/react-timeago": "^4.1.7",
     "@vitejs/plugin-react": "^4.3.2",
+    "@vitest/coverage-v8": "^2.1.5",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.12.0",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.12",
     "globals": "^15.11.0",
+    "happy-dom": "^15.11.6",
     "postcss": "^8.4.47",
     "prettier": "^3.3.3",
     "tailwindcss": "^3.4.14",
     "typescript": "^5.6.2",
     "typescript-eslint": "^8.10.0",
     "vite": "^5.4.9",
-    "vite-plugin-static-copy": "^2.0.0"
+    "vite-plugin-static-copy": "^2.0.0",
+    "vitest": "^2.1.5"
   },
   "overrides": {
     "@putdotio/api-client": {
