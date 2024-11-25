@@ -66,7 +66,13 @@ class ApiService {
     }
   }
 
-  async zipAndDownloadFiles(fileIds: number[]) {
+  async zipFiles(fileIds: number[]): Promise<{
+    missingFiles: unknown[];
+    size: number;
+    status: string;
+    url: string;
+    zip_status: string;
+  }> {
     const data = await this.api.Zips.Create({ ids: fileIds });
 
     if (data.status !== 200) {
@@ -76,7 +82,7 @@ class ApiService {
     let attempts = 0;
     let zipRes;
 
-    while (attempts < 15) {
+    while (true) {
       zipRes = await this.api.Zips.Get(data.body.zip_id);
 
       if (zipRes.body.error_msg) {
@@ -84,10 +90,7 @@ class ApiService {
       }
 
       if (zipRes.body.zip_status === "DONE") {
-        chrome.downloads.download({
-          url: zipRes.body.url,
-        });
-        break;
+        return zipRes.body;
       }
 
       attempts++;

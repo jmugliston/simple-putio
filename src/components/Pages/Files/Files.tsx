@@ -4,12 +4,14 @@ import { IFile } from "@putdotio/api-client";
 import { Checkbox } from "pretty-checkbox-react";
 import TimeAgo from "react-timeago";
 import { Tooltip } from "react-tooltip";
+import { toast } from "react-toastify";
 
 import { Spinner } from "../../Loading/Spinner";
 import { AddFolder, GetDownloadLinks, MoveFile } from "../../Modals";
 
-import ApiService from "../../../services/Api";
+import { ApiService } from "../../../services/Api";
 import { customTimeFormatter, formatBytes, truncate } from "../../../helpers";
+import { ZipDownloadReady } from "../../Notifications";
 
 function Files({ api }: { api: ApiService }) {
   const [initialLoad, setInitialLoad] = useState(true);
@@ -93,6 +95,17 @@ function Files({ api }: { api: ApiService }) {
       setBreadcrumbs(breadcrumbs.slice(0, breadcrumbs.length - 1));
     }
   };
+
+  const openZipReadyNotification = (link: string, size: number) =>
+    toast(<ZipDownloadReady link={link} size={size} />, {
+      position: "bottom-right",
+      autoClose: false,
+      hideProgressBar: true,
+      closeOnClick: false,
+      draggable: false,
+      progress: undefined,
+      theme: "light",
+    });
 
   useEffect(() => {
     const fetchFiles = async () => {
@@ -235,7 +248,11 @@ function Files({ api }: { api: ApiService }) {
                   data-tooltip-content="Zip and download"
                   disabled={selectedFileIds.length === 0 || actionInProgress}
                   onClick={() =>
-                    runAction(() => api.zipAndDownloadFiles(selectedFileIds))
+                    runAction(() =>
+                      api.zipFiles(selectedFileIds).then(({ url, size }) => {
+                        openZipReadyNotification(url, size);
+                      })
+                    )
                   }
                   className="w-8 mx-1 py-2 border rounded border-gray-400 text-gray-700 bg-white hover:bg-gray-500 hover:text-white disabled:pointer-events-none disabled:border-gray-300 disabled:text-gray-300"
                 >
@@ -352,7 +369,11 @@ function Files({ api }: { api: ApiService }) {
                       aria-label={`Download ${file.name}`}
                       onClick={() => {
                         if (file.file_type === "FOLDER") {
-                          runAction(() => api.zipAndDownloadFiles([file.id]));
+                          runAction(() =>
+                            api.zipFiles([file.id]).then(({ url, size }) => {
+                              openZipReadyNotification(url, size);
+                            })
+                          );
                         } else {
                           runAction(() => api.downloadFile(file.id));
                         }

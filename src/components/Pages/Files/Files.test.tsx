@@ -32,7 +32,7 @@ const mockApi = {
   createFolder: vi.fn(),
   deleteFiles: vi.fn(),
   moveFiles: vi.fn(),
-  zipAndDownloadFiles: vi.fn(),
+  zipFiles: vi.fn(),
   getDownloadURLs: vi.fn().mockResolvedValue(["http://example.com"]),
   downloadFile: vi.fn(),
 };
@@ -113,9 +113,7 @@ describe("Files component", () => {
 
     fireEvent.click(downloadButton);
 
-    await waitFor(() =>
-      expect(mockApi.zipAndDownloadFiles).toHaveBeenCalledWith([2])
-    );
+    await waitFor(() => expect(mockApi.zipFiles).toHaveBeenCalledWith([2]));
   });
 
   it("selects and deselects all files", async () => {
@@ -296,9 +294,7 @@ describe("Files component", () => {
       fireEvent.click(downloadButton);
     });
 
-    await waitFor(() =>
-      expect(mockApi.zipAndDownloadFiles).toHaveBeenCalledWith([1])
-    );
+    await waitFor(() => expect(mockApi.zipFiles).toHaveBeenCalledWith([1]));
   });
 
   it("handle action errors", async () => {
