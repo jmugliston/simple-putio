@@ -81,7 +81,10 @@ function App() {
         )}
         {activeTab === "Files" && (
           <div className="grow text-right content-center mx-4 text-lg">
-            <a target="_blank" href="https://github.com/atheius/simple-putio">
+            <a
+              target="_blank"
+              href="https://github.com/jmugliston/simple-putio"
+            >
               <FontAwesomeIcon icon={["fab", "github"]} />
             </a>
           </div>
