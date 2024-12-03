@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-function-type */
 import {
   afterAll,
   beforeAll,
@@ -27,7 +28,20 @@ vi.mock("import.meta", () => ({
   },
 }));
 
-let chrome = {} as { runtime: { id: string }; identity: any; storage: any };
+interface IChrome {
+  runtime: { id: string };
+  identity: {
+    launchWebAuthFlow: (details: unknown, cb: (url: string) => void) => void;
+  };
+  storage: {
+    sync: {
+      get: Function;
+      set: Function;
+    };
+  };
+}
+
+let chrome = {} as IChrome;
 
 describe("useApiToken", () => {
   beforeAll(() => {
@@ -54,7 +68,7 @@ describe("useApiToken", () => {
   });
 
   afterAll(() => {
-    delete (global as any).chrome;
+    delete (global as { chrome?: IChrome }).chrome;
   });
 
   beforeEach(() => {

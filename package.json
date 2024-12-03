@@ -27,7 +27,7 @@
     "build": "tsc -b && vite build",
     "build:watch": "tsc -b && vite build --watch",
     "build:release": "./release.sh",
-    "lint": "eslint .",
+    "lint": "eslint ./src",
     "preview": "vite preview"
   },
   "dependencies": {
