@@ -5,7 +5,7 @@
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/atheius/simple-putio.git"
+    "url": "git+ssh://git@github.com/jmugliston/simple-putio.git"
   },
   "keywords": [
     "simple-putio"
@@ -16,9 +16,9 @@
     "npm": ">=8.3.0"
   },
   "bugs": {
-    "url": "https://github.com/atheius/simple-putio/issues"
+    "url": "https://github.com/jmugliston/simple-putio/issues"
   },
-  "homepage": "https://github.com/atheius/simple-putio#readme",
+  "homepage": "https://github.com/jmugliston/simple-putio#readme",
   "scripts": {
     "format": "prettier --write src/*",
     "dev": "vite",
