@@ -8,3 +8,6 @@ updates:
       interval: "weekly"
     allow:
       - dependency-type: "production"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
