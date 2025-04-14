@@ -1,6 +1,6 @@
 {
   "name": "simple-putio",
-  "version": "2.4.9",
+  "version": "2.4.10",
   "description": "Simple put.io Chrome extension",
   "type": "module",
   "repository": {
