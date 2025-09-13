@@ -37,7 +37,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.6",
     "@putdotio/api-client": "^8.49.0",
-    "axios": "^1.11.0",
+    "axios": "^1.12.0",
     "copy-to-clipboard": "^3.3.3",
     "pretty-checkbox": "^3.0.3",
     "pretty-checkbox-react": "^3.2.0",
