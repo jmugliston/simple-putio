@@ -10,7 +10,7 @@ function useApiToken() {
     url.searchParams.append("response_type", "token");
     url.searchParams.append(
       "redirect_uri",
-      `https://${chrome.runtime.id}.chromiumapp.org/oauth`
+      `https://${chrome.runtime.id}.chromiumapp.org/oauth`,
     );
 
     chrome.identity.launchWebAuthFlow(
@@ -27,14 +27,14 @@ function useApiToken() {
         const token = responseUrl.split("=")[1];
         chrome.storage.sync.set({ accessToken: token });
         setApiToken(token);
-      }
+      },
     );
   };
 
   useEffect(() => {
     if (import.meta.env.PROD) {
       chrome.storage.sync.get("accessToken", ({ accessToken: apiToken }) => {
-        setApiToken(apiToken);
+        setApiToken(apiToken as string);
       });
       /* v8 ignore next 4 */
     } else {
