@@ -11,7 +11,7 @@ const getApiToken = async (): Promise<string> =>
       if (chrome.runtime.lastError) {
         return reject(chrome.runtime.lastError);
       }
-      return resolve(accessToken);
+      return resolve(accessToken as string);
     });
   });
 
@@ -91,11 +91,11 @@ const getTransfers = async () => {
   }
 
   const inProgressCount = transfers.filter((t: { status: string }) =>
-    ["IN_QUEUE", "DOWNLOADING", "COMPLETING"].includes(t.status)
+    ["IN_QUEUE", "DOWNLOADING", "COMPLETING"].includes(t.status),
   ).length;
 
   const completedCount = transfers.filter(
-    (t: { status: string }) => t.status === "COMPLETED"
+    (t: { status: string }) => t.status === "COMPLETED",
   ).length;
 
   switch (true) {
