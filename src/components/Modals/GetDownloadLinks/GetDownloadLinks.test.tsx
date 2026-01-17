@@ -1,6 +1,6 @@
 import { test, describe, expect, vi } from "vitest";
 import "@testing-library/jest-dom";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import copy from "copy-to-clipboard";
 
 import { GetDownloadLinks, GetDownloadLinksProps } from "./GetDownloadLinks";
@@ -22,10 +22,12 @@ describe("Get download links modal", () => {
     expect(screen.getByRole("textbox")).toHaveValue("link1\nlink2");
   });
 
-  test("copy links to clipboard", () => {
+  test("copy links to clipboard", async () => {
     render(<GetDownloadLinks {...defaultProps} />);
     const copyButton = screen.getByRole("button", { name: "Copy" });
-    fireEvent.click(copyButton);
+    await waitFor(() => {
+      fireEvent.click(copyButton);
+    });
     expect(copy).toHaveBeenCalledWith("link1\nlink2");
   });
 
