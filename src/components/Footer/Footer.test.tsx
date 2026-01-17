@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
@@ -5,9 +6,9 @@ import { Footer } from "./Footer";
 import { ApiService } from "../../services/Api";
 
 vi.mock("../../services/Api", () => ({
-  ApiService: vi.fn(() => ({
-    getDiskInfo: vi.fn().mockResolvedValue({ used: 50, free: 50 }),
-  })),
+  ApiService: vi.fn(function (this: any) {
+    this.getDiskInfo = vi.fn().mockResolvedValue({ used: 50, free: 50 });
+  }),
 }));
 
 describe("Footer component", () => {

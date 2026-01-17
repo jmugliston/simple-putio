@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, MockedFunction, MockedClass } from "vitest";
 import App from "./App";
 import { useApiToken } from "./hooks/ApiToken";
@@ -42,7 +42,7 @@ describe("App Component", () => {
     expect(getAuthMock).toHaveBeenCalled();
   });
 
-  it("renders Files tab by default when apiToken is present", () => {
+  it("renders Files tab by default when apiToken is present", async () => {
     mockedUseApiToken.mockReturnValue({
       apiToken: "test-token",
       getAuth: vi.fn(),
@@ -50,11 +50,13 @@ describe("App Component", () => {
 
     render(<App />);
 
-    expect(screen.getByText("Files")).toBeInTheDocument();
-    expect(screen.getByText("Transfers")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText("Files")).toBeInTheDocument();
+      expect(screen.getByText("Transfers")).toBeInTheDocument();
+    });
   });
 
-  it("switches to Transfers tab when clicked", () => {
+  it("switches to Transfers tab when clicked", async () => {
     mockedUseApiToken.mockReturnValue({
       apiToken: "test-token",
       getAuth: vi.fn(),
@@ -62,11 +64,16 @@ describe("App Component", () => {
 
     render(<App />);
 
-    fireEvent.click(screen.getByText("Transfers"));
-    expect(screen.getByText("Clear Finished")).toBeInTheDocument();
+    await waitFor(() => {
+      fireEvent.click(screen.getByText("Transfers"));
+    });
+    
+    await waitFor(() => {
+      expect(screen.getByText("Clear Finished")).toBeInTheDocument();
+    });
   });
 
-  it("clear in progress transfers", () => {
+  it("clear in progress transfers", async () => {
     mockedUseApiToken.mockReturnValue({
       apiToken: "test-token",
       getAuth: vi.fn(),
@@ -74,9 +81,13 @@ describe("App Component", () => {
 
     render(<App />);
 
-    fireEvent.click(screen.getByText("Transfers"));
+    await waitFor(() => {
+      fireEvent.click(screen.getByText("Transfers"));
+    });
 
-    fireEvent.click(screen.getByText("Clear Finished"));
+    await waitFor(() => {
+      fireEvent.click(screen.getByText("Clear Finished"));
+    });
 
     expect(mockedApiService.prototype.clearTransfers).toHaveBeenCalled();
   });

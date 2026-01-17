@@ -1,26 +1,27 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, beforeEach, vi, Mock } from "vitest";
 import ApiService from "./Api";
 
 const apiToken = "test-token";
 
 vi.mock("@putdotio/api-client", () => ({
-  default: vi.fn().mockImplementation(() => ({
-    token: apiToken,
-    setToken: vi.fn(),
-    Account: {
+  default: vi.fn(function (this: any) {
+    this.token = apiToken;
+    this.setToken = vi.fn();
+    this.Account = {
       Info: vi.fn(),
-    },
-    Files: {
+    };
+    this.Files = {
       Query: vi.fn(),
       Delete: vi.fn(),
       CreateFolder: vi.fn(),
       Move: vi.fn(),
-    },
-    Transfers: {
+    };
+    this.Transfers = {
       Query: vi.fn(),
       ClearAll: vi.fn(),
-    },
-  })),
+    };
+  }),
 }));
 
 describe("ApiService", () => {

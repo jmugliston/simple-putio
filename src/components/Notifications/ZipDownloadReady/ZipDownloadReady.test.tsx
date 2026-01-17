@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import copy from "copy-to-clipboard";
 
@@ -24,12 +24,14 @@ describe("Zip download ready notification", () => {
     expect(sizeText).toBeInTheDocument();
   });
 
-  it("copies link to clipboard when button is clicked", () => {
+  it("copies link to clipboard when button is clicked", async () => {
     render(<ZipDownloadReady link={link} size={size} />);
 
     const copyButton = screen.getByRole("button", { name: "Copy" });
 
-    fireEvent.click(copyButton);
+    await waitFor(() => {
+      fireEvent.click(copyButton);
+    });
 
     expect(copy).toHaveBeenCalledWith("http://example.com/file.zip");
   });
