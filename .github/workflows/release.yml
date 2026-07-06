@@ -38,4 +38,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ''
-        run: pnpm add -g @semantic-release/git semantic-release && semantic-release
+        run: pnpm add -g @semantic-release/git @semantic-release/exec semantic-release && semantic-release
