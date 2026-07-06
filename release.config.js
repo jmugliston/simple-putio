@@ -23,7 +23,20 @@ export default {
         npmPublish: false,
       },
     ],
-    '@semantic-release/git',
+    [
+      '@semantic-release/exec',
+      {
+        prepareCmd: 'node update-manifest-version.cjs',
+      },
+    ],
+    [
+      '@semantic-release/git',
+      {
+        assets: ['package.json', 'manifest.json'],
+        message:
+          'chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}',
+      },
+    ],
     '@semantic-release/github',
   ],
 }
