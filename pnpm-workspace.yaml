@@ -1,0 +1,7 @@
+allowBuilds:
+  es5-ext: true
+  esbuild: true
+
+overrides:
+  axios: ^1.18.1
+
